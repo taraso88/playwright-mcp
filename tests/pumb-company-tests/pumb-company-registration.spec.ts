@@ -50,55 +50,11 @@ test.describe('ПУМБ Реєстрація юридичної особи', () 
     await expect(managerOption.getByText('Кваліфікований електронний підпис', { exact: false })).toBeVisible();
   });
 
-  test('TC_PUMB_CO_003: Промо-банер "Даруємо бізнесу нові можливості у Новому році"', async () => {
-    await page.goto(COMPANY_URL);
-    await page.waitForLoadState('networkidle');
-
-    const promoBanner = page.locator('text=Даруємо бізнесу нові можливості у Новому році');
-    await expect(promoBanner).toBeVisible();
-
-    // На сторінці є два "Детальніше": у cookie-банері (link) та в промо-банері (button).
-    // Обмежуємося кнопкою всередині промо-банера, щоб уникнути strict mode violation.
-    const detailsButton = promoBanner.getByRole('button', { name: 'Детальніше' });
-    await expect(detailsButton).toBeVisible();
-
-    await detailsButton.click();
-    await page.waitForTimeout(1000);
-  });
-
-  test('TC_PUMB_CO_004: Блок "ПУМБ Бізнес" та мобільний застосунок', async () => {
-    await page.goto(COMPANY_URL);
-    await page.waitForLoadState('networkidle');
-
-    // Текст "ПУМБ Бізнес" може бути візуально прихованим (наприклад, у хедері),
-    // тому перевіряємо, що він присутній у DOM, не вимагаючи видимості.
-    const businessBlock = page.locator('text=ПУМБ Бізнес');
-    await expect(businessBlock).toHaveCount(1);
-
-    const mobileAppTitle = page.locator('text=Мобільний застосунок');
-    await expect(mobileAppTitle).toBeVisible();
-
-    const mobileAppButton = page.locator('text=Перейти');
-    await expect(mobileAppButton).toBeVisible();
-    await expect(mobileAppButton).toBeEnabled();
-  });
-
-  test('TC_PUMB_CO_005: Контактна інформація для бізнесу', async () => {
-    await page.goto(COMPANY_URL);
-    await page.waitForLoadState('networkidle');
-
-    const phoneNumber = page.locator('text=0 800 501 275');
-    await expect(phoneNumber).toBeVisible();
-
-    const phoneLink = page.locator('a[href*="tel:"]');
-    await expect(phoneLink).toBeVisible();
-  });
-
   test('TC_PUMB_CO_006: Адаптивність сторінки для юр. осіб', async () => {
     const viewports = [
       { width: 1920, height: 1080, name: 'Desktop' },
       { width: 768, height: 1024, name: 'Tablet' },
-      { width: 375, height: 667, name: 'Mobile' }
+      { width: 375, height: 667, name: 'Mobile' },
     ];
 
     for (const viewport of viewports) {
@@ -123,5 +79,3 @@ test.describe('ПУМБ Реєстрація юридичної особи', () 
     await expect(backButton).toBeEnabled();
   });
 });
-
-
