@@ -12,72 +12,24 @@ pipeline {
             }
         }
 
-        stage('Install deps (company)') {
+        stage('Install deps') {
             steps {
-                dir('tests/pumb-company-tests') {
-                    bat 'npm ci'
-                    bat 'npx playwright install --with-deps'
-                }
+                bat 'npm ci'
+                bat 'npx playwright install --with-deps'
             }
         }
 
-        stage('Run company Playwright tests') {
-            steps {
-                dir('tests/pumb-company-tests') {
-                    bat 'npm run test'
-                }
+        stage('Run PUMB company tests') {
+    steps {
+        bat 'npx playwright test --config=playwright-company.config.ts tests/pumb-company-tests'
             }
-            post {
-                always {
-                    // JUnit-звіт з папки company-сьюта
-                    junit 'tests/pumb-company-tests/test-results/*.xml'
-                    // Архівуємо HTML-звіт
-                    archiveArtifacts artifacts: 'tests/pumb-company-tests/playwright-report/**', fingerprint: true
-                }
-            }
+        }
+    }
+
+    post {
+        always {
+            junit 'tests/pumb-company-tests/test-results/*.xml'
+            archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
         }
     }
 }
-
-pipeline {
-    agent any
-
-    environment {
-        CI = 'true'
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Install deps (company)') {
-            steps {
-                dir('tests/pumb-company-tests') {
-                    bat 'npm ci'
-                    bat 'npx playwright install --with-deps'
-                }
-            }
-        }
-
-        stage('Run company Playwright tests') {
-            steps {
-                dir('tests/pumb-company-tests') {
-                    bat 'npm run test'
-                }
-            }
-            post {
-                always {
-                    // JUnit-звіти для Jenkins
-                    junit 'tests/pumb-company-tests/test-results/*.xml'
-                    // HTML‑звіт Playwright
-                    archiveArtifacts artifacts: 'tests/pumb-company-tests/playwright-report/**', fingerprint: true
-                }
-            }
-        }
-    }
-}
-
-
