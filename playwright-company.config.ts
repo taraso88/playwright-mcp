@@ -6,10 +6,13 @@ export default defineConfig<TestOptions>({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   workers: process.env.CI ? 2 : undefined,
+
   reporter: [
     ['list'],
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['junit', { outputFile: 'tests/pumb-company-tests/test-results/results.xml' }],
   ],
+
   projects: [
     { name: 'chrome' },
     ...process.env.MCP_IN_DOCKER ? [{
@@ -17,8 +20,8 @@ export default defineConfig<TestOptions>({
       grep: /browser_navigate|browser_click/,
       use: {
         mcpBrowser: 'chromium',
-        mcpMode: 'docker' as const
-      }
+        mcpMode: 'docker' as const,
+      },
     }] : [],
   ],
 });
