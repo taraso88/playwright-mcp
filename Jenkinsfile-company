@@ -31,8 +31,8 @@ pipeline {
 
         stage('Allure report') {
     steps {
-        // Зверни увагу: allure generate --output ... "./allure-results"
-        bat 'npx allure generate --output allure-report --clean "./allure-results"'
+        // v3: без --clean, з шаблоном "./allure-results"
+        bat 'npx allure generate --output allure-report "./allure-results"'
         archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
     }
 }
