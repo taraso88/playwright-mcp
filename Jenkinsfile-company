@@ -32,7 +32,7 @@ pipeline {
         stage('Allure report') {
     steps {
         // v3: без --clean, з шаблоном "./allure-results"
-        bat 'npx allure generate --output allure-report "./allure-results"'
+        bat 'npx allure generate --output allure-report "./**/allure-results"'
         archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
     }
 }
