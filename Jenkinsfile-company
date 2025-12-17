@@ -33,7 +33,6 @@ pipeline {
 
         stage('Allure report') {
             steps {
-                // Генеруємо звіт, очищаючи попередній allure-report
                 bat 'npx allure generate "allure-results" --clean -o "allure-report"'
                 archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
             }
@@ -44,6 +43,15 @@ pipeline {
         always {
             junit 'tests/pumb-company-tests/test-results/*.xml'
             archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
+
+            // Плагін Allure: підхоплює allure-results і додає вкладку Allure Report
+            allure([
+                includeProperties: false,
+                jdk: '',
+                properties: [],
+                reportBuildPolicy: 'ALWAYS',
+                results: [[path: 'allure-results']]
+            ])
         }
     }
 }
