@@ -6,7 +6,6 @@ pipeline {
     }
 
     triggers {
-        // Щодня о 03:00
         cron('0 3 * * *')
     }
 
@@ -27,6 +26,15 @@ pipeline {
         stage('Run PUMB company tests') {
             steps {
                 bat 'npx playwright test --config=playwright-company.config.ts tests/pumb-company-tests'
+            }
+        }
+
+        stage('Allure report') {
+            steps {
+                // Генеруємо HTML‑звіт Allure
+                bat 'npx allure generate allure-results -o allure-report --clean'
+                // Архівуємо Allure‑звіт
+                archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
             }
         }
     }
