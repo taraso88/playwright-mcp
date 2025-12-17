@@ -24,18 +24,25 @@ pipeline {
         }
 
         stage('Run PUMB company tests') {
-            steps {
-                bat 'npx playwright test --config=playwright-company.config.ts tests/pumb-company-tests'
-            }
-        }
-
+    steps {
+        bat 'npx playwright test --config=playwright-company.config.ts tests/pumb-company-tests'
+        // ДІАГНОСТИКА: показати, де з’явився allure-results
+        bat 'dir /s /b allure-results'
+    }
+}
         stage('Allure report') {
     steps {
-        // v3: без --clean, з шаблоном "./allure-results"
-        bat 'npx allure generate --output allure-report "./**/allure-results"'
+        // Якщо результати в корені:
+        // bat 'npx allure generate --output allure-report "allure-results"'
+
+        // Якщо результати в tests/pumb-company-tests/allure-results:
+        // bat 'npx allure generate --output allure-report "tests/pumb-company-tests/allure-results"'
+
+        bat 'npx allure generate --output allure-report "allure-results"'
         archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
     }
 }
+
     }
 
     post {

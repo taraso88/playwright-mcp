@@ -11,6 +11,7 @@ export default defineConfig<TestOptions>({
     ['list'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['junit', { outputFile: 'tests/pumb-company-tests/test-results/results.xml' }],
+    ['allure-playwright', { resultsDir: 'allure-results' }],
   ],
 
   projects: [
