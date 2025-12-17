@@ -30,11 +30,12 @@ pipeline {
         }
 
         stage('Allure report') {
-            steps {
-                bat 'npx allure generate allure-results --output allure-report --clean'
-                archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
-            }
-        }
+    steps {
+        // Зверни увагу: allure generate --output ... "./allure-results"
+        bat 'npx allure generate --output allure-report --clean "./allure-results"'
+        archiveArtifacts artifacts: 'allure-report/**', fingerprint: true
+    }
+}
     }
 
     post {
